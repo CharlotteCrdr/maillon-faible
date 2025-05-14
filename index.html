@@ -237,10 +237,15 @@
       box.className = "timerBox";
 
       const btnPlayPause = document.createElement("button");
-      btnPlayPause.textContent = isPaused ? "▶️ Reprendre" : "⏸️ Pause";
+      btnPlayPause.textContent = isPaused ? "▶️ Démarrer" : "⏸️ Pause";
       btnPlayPause.onclick = () => {
-        isPaused = !isPaused;
-        btnPlayPause.textContent = isPaused ? "▶️ Reprendre" : "⏸️ Pause";
+        if (isPaused) {
+          isPaused = false;
+          btnPlayPause.textContent = "⏸️ Pause";
+        } else {
+          isPaused = true;
+          btnPlayPause.textContent = "▶️ Reprendre";
+        }
       };
 
       const btnNext = document.createElement("button");
@@ -249,7 +254,6 @@
         if (currentTimerIndex < durees.length - 1) {
           currentTimerIndex++;
           afficherTimer(currentTimerIndex);
-          demarrerTimer(currentTimerIndex);
         }
       };
 
@@ -259,8 +263,14 @@
         if (currentTimerIndex > 0) {
           currentTimerIndex--;
           afficherTimer(currentTimerIndex);
-          demarrerTimer(currentTimerIndex);
         }
+      };
+
+      const btnStart = document.createElement("button");
+      btnStart.textContent = "▶️ Démarrer le minuteur";
+      btnStart.onclick = () => {
+        demarrerTimer(currentTimerIndex);
+        btnStart.disabled = true; // Désactiver le bouton "Démarrer" une fois le minuteur lancé
       };
 
       const timerDiv = document.createElement("div");
@@ -270,14 +280,4 @@
 
       box.appendChild(btnPrevious);
       box.appendChild(btnPlayPause);
-      box.appendChild(btnNext);
-      box.appendChild(timerDiv);
-      container.appendChild(box);
-
-      demarrerTimer(index);
-    }
-
-    afficherTimer(currentTimerIndex);
-  </script>
-</body>
-</html>
+      box.appendChild(btn
