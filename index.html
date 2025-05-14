@@ -6,18 +6,23 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      text-align: center;
       background-color: #0c1c2c;
       color: white;
       padding: 30px;
+      margin: 0;
     }
+
     h1 {
-      margin-bottom: 20px;
+      text-align: center;
+      margin-bottom: 30px;
     }
+
     .display {
       font-size: 1.3rem;
-      margin: 15px;
+      margin: 15px 0;
+      text-align: center;
     }
+
     button {
       font-size: 1.1rem;
       padding: 10px 20px;
@@ -27,48 +32,52 @@
       cursor: pointer;
       transition: 0.2s;
     }
+
     .good { background-color: #28a745; color: white; }
     .bad { background-color: #dc3545; color: white; }
     .bank { background-color: #ffc107; color: black; }
 
+    .controls {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .layout {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      gap: 60px;
+      flex-wrap: wrap;
+    }
+
     .echelle {
-      margin-top: 30px;
       width: 220px;
-      margin-left: auto;
-      margin-right: auto;
       text-align: left;
     }
+
     .montant {
       padding: 6px 12px;
       border-radius: 5px;
       margin: 4px 0;
       font-weight: bold;
     }
+
     .actuel {
       background-color: #28a745;
       color: white;
     }
+
     .inactif {
       color: gray;
     }
 
-    h2 {
-      margin-top: 50px;
-    }
-
-    #timersContainer {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 25px;
-      margin-top: 20px;
-    }
-
     .timerBox {
       background-color: #1a2a3a;
-      padding: 15px;
+      padding: 12px;
       border-radius: 10px;
       width: 180px;
+      margin-bottom: 10px;
+      text-align: center;
     }
 
     .timerBox button {
@@ -79,24 +88,31 @@
       margin-top: 10px;
       font-size: 1.4rem;
     }
+
+    @media (max-width: 700px) {
+      .layout {
+        flex-direction: column;
+        align-items: center;
+      }
+    }
   </style>
 </head>
 <body>
-  <h1>💡 Le Maillon Faible - Système de Banque</h1>
+  <h1>💡 Le Maillon Faible - Banque & Minuteurs</h1>
 
   <div class="display">Gain en cours : <span id="currentGain">0</span> €</div>
   <div class="display">Cagnotte totale : <span id="totalBanked">0</span> €</div>
 
-  <button class="good" onclick="bonneReponse()">✅ Bonne réponse</button>
-  <button class="bad" onclick="mauvaiseReponse()">❌ Mauvaise réponse</button>
-  <button class="bank" onclick="banquer()">💰 Banquer</button>
+  <div class="controls">
+    <button class="good" onclick="bonneReponse()">✅ Bonne réponse</button>
+    <button class="bad" onclick="mauvaiseReponse()">❌ Mauvaise réponse</button>
+    <button class="bank" onclick="banquer()">💰 Banquer</button>
+  </div>
 
-  <div class="echelle" id="echelle"></div>
-
-  <hr style="margin: 50px 0;">
-
-  <h2>⏱️ Minuteurs par manche</h2>
-  <div id="timersContainer"></div>
+  <div class="layout">
+    <div class="echelle" id="echelle"></div>
+    <div id="timersContainer"></div>
+  </div>
 
   <script>
     // -------- BANQUE --------
@@ -162,7 +178,7 @@
     }
 
     function demarrerTimer(index) {
-      // Arrête le précédent si actif
+      // Stoppe l'ancien si actif
       if (timers[index] && timers[index].interval) {
         clearInterval(timers[index].interval);
       }
@@ -184,14 +200,14 @@
       };
     }
 
-    // Création des minuteurs
+    // Créer les minuteurs
     const container = document.getElementById("timersContainer");
     for (let i = 0; i < 7; i++) {
       const box = document.createElement("div");
       box.className = "timerBox";
 
       const btn = document.createElement("button");
-      btn.textContent = `▶️ Démarrer Manche ${i + 1}`;
+      btn.textContent = `▶️ Manche ${i + 1}`;
       btn.onclick = () => demarrerTimer(i);
 
       const timerDiv = document.createElement("div");
