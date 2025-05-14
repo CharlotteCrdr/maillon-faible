@@ -73,20 +73,23 @@
 
     #timersContainer {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: 1fr;
       gap: 15px;
+      text-align: center;
     }
 
     .timerBox {
       background-color: #1a2a3a;
       padding: 12px;
       border-radius: 10px;
-      width: 180px;
+      width: 250px;
       text-align: center;
+      margin: 10px;
     }
 
     .timerBox button {
       width: 100%;
+      padding: 12px;
     }
 
     .timerDisplay {
@@ -110,10 +113,6 @@
       .layout {
         flex-direction: column;
         align-items: center;
-      }
-
-      #timersContainer {
-        grid-template-columns: 1fr;
       }
     }
   </style>
@@ -190,7 +189,9 @@
 
     // -------- MINUTEURS --------
     const durees = [150, 135, 120, 105, 90, 75, 60]; // secondes
-    const timers = [];
+    let timers = [];
+    let currentTimerIndex = 0; // Indice du minuteur en cours
+    let isPaused = false; // Contrôle de pause
 
     function formatTemps(s) {
       const min = Math.floor(s / 60);
@@ -209,41 +210,74 @@
 
       timers[index] = {
         interval: setInterval(() => {
-          tempsRestant--;
-          if (tempsRestant <= 0) {
-            clearInterval(timers[index].interval);
-            display.textContent = "⏰ Temps écoulé";
-            display.classList.remove("clignote");
-          } else {
-            display.textContent = formatTemps(tempsRestant);
-            if (tempsRestant <= 10) {
-              display.classList.add("clignote");
-            } else {
+          if (!isPaused) {
+            tempsRestant--;
+            if (tempsRestant <= 0) {
+              clearInterval(timers[index].interval);
+              display.textContent = "⏰ Temps écoulé";
               display.classList.remove("clignote");
+            } else {
+              display.textContent = formatTemps(tempsRestant);
+              if (tempsRestant <= 10) {
+                display.classList.add("clignote");
+              } else {
+                display.classList.remove("clignote");
+              }
             }
           }
         }, 1000)
       };
     }
 
-    const container = document.getElementById("timersContainer");
-    for (let i = 0; i < 7; i++) {
+    function afficherTimer(index) {
+      const container = document.getElementById("timersContainer");
+      container.innerHTML = ""; // Vider le container pour afficher le minuteur actuel
+
       const box = document.createElement("div");
       box.className = "timerBox";
 
-      const btn = document.createElement("button");
-      btn.textContent = `▶️ Manche ${i + 1}`;
-      btn.onclick = () => demarrerTimer(i);
+      const btnPlayPause = document.createElement("button");
+      btnPlayPause.textContent = isPaused ? "▶️ Reprendre" : "⏸️ Pause";
+      btnPlayPause.onclick = () => {
+        isPaused = !isPaused;
+        btnPlayPause.textContent = isPaused ? "▶️ Reprendre" : "⏸️ Pause";
+      };
+
+      const btnNext = document.createElement("button");
+      btnNext.textContent = "➡️ Suivant";
+      btnNext.onclick = () => {
+        if (currentTimerIndex < durees.length - 1) {
+          currentTimerIndex++;
+          afficherTimer(currentTimerIndex);
+          demarrerTimer(currentTimerIndex);
+        }
+      };
+
+      const btnPrevious = document.createElement("button");
+      btnPrevious.textContent = "⬅️ Précédent";
+      btnPrevious.onclick = () => {
+        if (currentTimerIndex > 0) {
+          currentTimerIndex--;
+          afficherTimer(currentTimerIndex);
+          demarrerTimer(currentTimerIndex);
+        }
+      };
 
       const timerDiv = document.createElement("div");
-      timerDiv.id = `timer${i}`;
+      timerDiv.id = `timer${index}`;
       timerDiv.className = "timerDisplay";
-      timerDiv.textContent = formatTemps(durees[i]);
+      timerDiv.textContent = formatTemps(durees[index]);
 
-      box.appendChild(btn);
+      box.appendChild(btnPrevious);
+      box.appendChild(btnPlayPause);
+      box.appendChild(btnNext);
       box.appendChild(timerDiv);
       container.appendChild(box);
+
+      demarrerTimer(index);
     }
+
+    afficherTimer(currentTimerIndex);
   </script>
 </body>
 </html>
