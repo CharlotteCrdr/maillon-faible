@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title>Le Maillon Faible - Banque et Minuteurs</title>
+  <title>Le Maillon Faible - Banque & Minuteurs</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -71,12 +71,17 @@
       color: gray;
     }
 
+    #timersContainer {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+    }
+
     .timerBox {
       background-color: #1a2a3a;
       padding: 12px;
       border-radius: 10px;
       width: 180px;
-      margin-bottom: 10px;
       text-align: center;
     }
 
@@ -93,6 +98,10 @@
       .layout {
         flex-direction: column;
         align-items: center;
+      }
+
+      #timersContainer {
+        grid-template-columns: 1fr;
       }
     }
   </style>
@@ -178,7 +187,6 @@
     }
 
     function demarrerTimer(index) {
-      // Stoppe l'ancien si actif
       if (timers[index] && timers[index].interval) {
         clearInterval(timers[index].interval);
       }
@@ -200,7 +208,6 @@
       };
     }
 
-    // Créer les minuteurs
     const container = document.getElementById("timersContainer");
     for (let i = 0; i < 7; i++) {
       const box = document.createElement("div");
