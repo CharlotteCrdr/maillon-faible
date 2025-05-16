@@ -1,148 +1,134 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <title>Le Maillon Faible - Joueurs à droite</title>
+  <meta charset="UTF-8" />
+  <title>Maillon Faible - Compact</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #0c1c2c;
-      color: white;
+    * { box-sizing: border-box; }
+    html, body {
       margin: 0;
-      padding: 20px;
+      padding: 0;
+      height: 100vh;
+      font-family: Arial, sans-serif;
+      background: #0c1c2c;
+      color: white;
+      overflow: hidden;
+    }
+    body {
       display: flex;
-      gap: 30px;
-    }
-    .gauche {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-      max-width: 250px;
-    }
-    .droite {
-      flex: 2;
-      display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-    }
-    h1 {
-      width: 100%;
-      text-align: center;
-      margin-bottom: 20px;
-    }
-    .echelle, .minuteur {
-      background-color: #1a2a3a;
-      padding: 20px;
-      border-radius: 10px;
-    }
-    .montant {
-      margin: 5px 0;
-      padding: 8px;
-      border-radius: 5px;
-    }
-    .actuel { background: #28a745; color: white; }
-    .inactif { color: gray; }
-    .bank {
-      background-color: #ffc107;
-      color: black;
-      font-weight: bold;
-      border: none;
-      padding: 10px;
-      border-radius: 10px;
-      cursor: pointer;
-      margin: 10px auto;
-      display: block;
-    }
-    .joueurs {
-      display: flex;
-      flex-wrap: wrap;
       gap: 10px;
-      justify-content: flex-end;
-    }
-    .joueur {
-      background-color: #1a2a3a;
-      border-radius: 10px;
       padding: 10px;
-      width: 160px;
-      text-align: center;
     }
-    .joueur input {
+    .gauche, .centre, .droite {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .gauche { width: 20%; }
+    .centre { width: 30%; align-items: center; }
+    .droite { width: 50%; overflow-y: auto; }
+    h1 {
+      font-size: 1.2rem;
+      text-align: center;
+      margin: 0;
+    }
+    .display {
       font-size: 0.9rem;
       text-align: center;
-      width: 90%;
-      margin-bottom: 5px;
+    }
+    .bank {
+      background: #ffc107;
+      border: none;
+      border-radius: 5px;
+      padding: 5px;
+      font-size: 0.9rem;
+      cursor: pointer;
+    }
+    .echelle, .minuteur {
+      background: #1a2a3a;
+      border-radius: 8px;
+      padding: 8px;
+      font-size: 0.85rem;
+    }
+    .montant {
+      padding: 4px;
+      margin: 2px 0;
+      border-radius: 4px;
+    }
+    .actuel { background: #28a745; }
+    .inactif { color: gray; }
+
+    .timerDisplay {
+      font-size: 1.4rem;
+      text-align: center;
+      margin: 6px 0;
+    }
+
+    .joueurs {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 8px;
+      padding-right: 10px;
+    }
+    .joueur {
+      background: #1a2a3a;
+      padding: 5px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+    }
+    .joueur input {
+      width: 100%;
+      font-size: 0.8rem;
+      margin-bottom: 4px;
     }
     .joueur button {
-      margin: 3px;
-      padding: 5px 10px;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-    .bonne { background-color: #28a745; color: white; }
-    .mauvaise { background-color: #dc3545; color: white; }
-    .display {
-      text-align: center;
-      margin: 10px;
-    }
-    .minuteur button {
-      margin: 5px;
-      padding: 6px 12px;
-      border-radius: 6px;
+      padding: 3px 6px;
+      font-size: 0.7rem;
+      margin: 2px;
+      border-radius: 4px;
       border: none;
       cursor: pointer;
     }
-    .timerDisplay {
-      font-size: 2rem;
-      text-align: center;
-      margin-top: 10px;
-      color: #00ffcc;
-    }
-    .clignote {
-      color: red;
-      animation: clignote 1s step-start 0s infinite;
-    }
-    @keyframes clignote {
-      50% { opacity: 0; }
-      100% { opacity: 1; }
-    }
+    .bonne { background: #28a745; color: white; }
+    .mauvaise { background: #dc3545; color: white; }
+    button { cursor: pointer; }
+
     #exportBtn {
-      display: block;
-      margin: 20px auto;
-      padding: 10px;
       background: #007bff;
-      border: none;
       color: white;
-      font-weight: bold;
-      border-radius: 8px;
-      cursor: pointer;
+      border: none;
+      padding: 6px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      margin-top: auto;
     }
   </style>
 </head>
 <body>
   <div class="gauche">
-    <h1>💡 Le Maillon Faible</h1>
-    <div class="display">Gain en cours : <span id="currentGain">0</span> €</div>
-    <div class="display">Cagnotte totale : <span id="totalBanked">0</span> €</div>
+    <h1>💡 Maillon Faible</h1>
+    <div class="display">En cours : <span id="currentGain">0</span> €</div>
+    <div class="display">Cagnotte : <span id="totalBanked">0</span> €</div>
     <button class="bank" onclick="banquer()">💰 Banquer</button>
-
     <div class="echelle" id="echelle"></div>
+  </div>
 
+  <div class="centre">
     <div class="minuteur" id="minuteurBox">
-      <h3>Minuteur Manche</h3>
       <div class="timerDisplay" id="timer">2:30</div>
-      <button onclick="startTimer()">▶️ Démarrer</button>
-      <button onclick="pauseTimer()">⏸️ Pause</button>
-      <button onclick="resetTimer()">🔁 Réinitialiser</button><br>
-      <button onclick="prevTimer()">⬅️ Manche précédente</button>
-      <button onclick="nextTimer()">➡️ Manche suivante</button>
+      <button onclick="startTimer()">▶️</button>
+      <button onclick="pauseTimer()">⏸️</button>
+      <button onclick="resetTimer()">🔁</button>
+      <div>
+        <button onclick="prevTimer()">⬅️</button>
+        <button onclick="nextTimer()">➡️</button>
+      </div>
     </div>
   </div>
 
   <div class="droite">
     <div class="joueurs" id="joueursContainer"></div>
-    <button id="exportBtn" onclick="exportCSV()">📤 Exporter les scores</button>
+    <button id="exportBtn" onclick="exportCSV()">📤 Exporter</button>
   </div>
 
   <script>
@@ -167,7 +153,6 @@
       gainEnCours = montants[niveauActuel];
       document.getElementById("currentGain").textContent = gainEnCours;
       document.getElementById("totalBanked").textContent = cagnotteTotale;
-
       const echelle = document.getElementById("echelle");
       echelle.innerHTML = "";
       for (let i = montants.length - 1; i >= 0; i--) {
@@ -176,7 +161,6 @@
         div.className = "montant " + (i === niveauActuel ? "actuel" : "inactif");
         echelle.appendChild(div);
       }
-
       joueurs.sort((a, b) => b.bonnes - a.bonnes);
       renderJoueurs();
     }
@@ -209,7 +193,7 @@
         div.className = "joueur";
         div.innerHTML = `
           <input value="${j.nom}" onchange="updateNom(${i}, this.value)" />
-          <p>✅ <span>${j.bonnes}</span> | ❌ <span>${j.mauvaises}</span></p>
+          <div>✅ ${j.bonnes} | ❌ ${j.mauvaises}</div>
           <button class="bonne" onclick="bonne(${i})">Bonne</button>
           <button class="mauvaise" onclick="mauvaise(${i})">Mauvaise</button>
         `;
@@ -230,7 +214,6 @@
     function updateTimerDisplay() {
       const display = document.getElementById("timer");
       display.textContent = formatTemps(tempsRestant);
-      display.className = "timerDisplay" + (tempsRestant <= 10 ? " clignote" : "");
     }
 
     function startTimer() {
@@ -241,7 +224,7 @@
           tempsRestant--;
           if (tempsRestant <= 0) {
             clearInterval(interval);
-            document.getElementById("timer").textContent = "⏰ Temps écoulé";
+            document.getElementById("timer").textContent = "⏰ Fini";
           } else {
             updateTimerDisplay();
           }
@@ -249,23 +232,18 @@
       }, 1000);
     }
 
-    function pauseTimer() {
-      isPaused = !isPaused;
-    }
-
+    function pauseTimer() { isPaused = !isPaused; }
     function resetTimer() {
       clearInterval(interval);
       tempsRestant = tempsParManche[mancheActuelle];
       updateTimerDisplay();
     }
-
     function prevTimer() {
       if (mancheActuelle > 0) {
         mancheActuelle--;
         resetTimer();
       }
     }
-
     function nextTimer() {
       if (mancheActuelle < tempsParManche.length - 1) {
         mancheActuelle++;
@@ -274,7 +252,7 @@
     }
 
     function exportCSV() {
-      let csv = "Nom,Bonnes réponses,Mauvaises réponses\n";
+      let csv = "Nom,Bonnes,Mauvaises\n";
       joueurs.forEach(j => {
         csv += `${j.nom},${j.bonnes},${j.mauvaises}\n`;
       });
