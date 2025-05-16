@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8" />
-  <title>Maillon Faible - Compact</title>
+  <title>Maillon Faible - Fixe</title>
   <style>
     * { box-sizing: border-box; }
     html, body {
@@ -161,7 +161,7 @@
         div.className = "montant " + (i === niveauActuel ? "actuel" : "inactif");
         echelle.appendChild(div);
       }
-      joueurs.sort((a, b) => b.bonnes - a.bonnes);
+      // Suppression du tri automatique
       renderJoueurs();
     }
 
