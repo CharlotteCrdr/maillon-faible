@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8" />
-  <title>Maillon Faible - Fixe</title>
+  <title>Maillon Faible</title>
   <style>
     * { box-sizing: border-box; }
     html, body {
@@ -76,11 +76,6 @@
       border-radius: 6px;
       font-size: 0.8rem;
     }
-    .joueur input {
-      width: 100%;
-      font-size: 0.8rem;
-      margin-bottom: 4px;
-    }
     .joueur button {
       padding: 3px 6px;
       font-size: 0.7rem;
@@ -143,11 +138,17 @@
     let interval = null;
     let isPaused = true;
 
-    const joueurs = Array.from({ length: 9 }, (_, i) => ({
-      nom: `Joueur ${i + 1}`,
-      bonnes: 0,
-      mauvaises: 0
-    }));
+    const joueurs = [
+      { nom: "Sandrine", bonnes: 0, mauvaises: 0 },
+      { nom: "Mattéo", bonnes: 0, mauvaises: 0 },
+      { nom: "Séverine", bonnes: 0, mauvaises: 0 },
+      { nom: "David", bonnes: 0, mauvaises: 0 },
+      { nom: "Agathe", bonnes: 0, mauvaises: 0 },
+      { nom: "Nico", bonnes: 0, mauvaises: 0 },
+      { nom: "Karine", bonnes: 0, mauvaises: 0 },
+      { nom: "Maxime", bonnes: 0, mauvaises: 0 },
+      { nom: "Anne-Marie", bonnes: 0, mauvaises: 0 }
+    ];
 
     function updateAffichage() {
       gainEnCours = montants[niveauActuel];
@@ -161,7 +162,6 @@
         div.className = "montant " + (i === niveauActuel ? "actuel" : "inactif");
         echelle.appendChild(div);
       }
-      // Suppression du tri automatique
       renderJoueurs();
     }
 
@@ -192,17 +192,13 @@
         const div = document.createElement("div");
         div.className = "joueur";
         div.innerHTML = `
-          <input value="${j.nom}" onchange="updateNom(${i}, this.value)" />
+          <div><strong>${j.nom}</strong></div>
           <div>✅ ${j.bonnes} | ❌ ${j.mauvaises}</div>
           <button class="bonne" onclick="bonne(${i})">Bonne</button>
           <button class="mauvaise" onclick="mauvaise(${i})">Mauvaise</button>
         `;
         container.appendChild(div);
       });
-    }
-
-    function updateNom(index, value) {
-      joueurs[index].nom = value;
     }
 
     function formatTemps(s) {
@@ -249,7 +245,18 @@
         mancheActuelle++;
         resetTimer();
       }
-  
+    }
+
+    function exportCSV() {
+      let csv = "Nom,Bonnes,Mauvaises\n";
+      joueurs.forEach(j => {
+        csv += `${j.nom},${j.bonnes},${j.mauvaises}\n`;
+      });
+      const blob = new Blob([csv], { type: "text/csv" });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = "scores_maillon_faible.csv";
+      link.click();
     }
 
     updateAffichage();
