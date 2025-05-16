@@ -249,18 +249,7 @@
         mancheActuelle++;
         resetTimer();
       }
-    }
-
-    function exportCSV() {
-      let csv = "Nom,Bonnes,Mauvaises\n";
-      joueurs.forEach(j => {
-        csv += `${j.nom},${j.bonnes},${j.mauvaises}\n`;
-      });
-      const blob = new Blob([csv], { type: "text/csv" });
-      const link = document.createElement("a");
-      link.href = URL.createObjectURL(blob);
-      link.download = "scores_maillon_faible.csv";
-      link.click();
+  
     }
 
     updateAffichage();
