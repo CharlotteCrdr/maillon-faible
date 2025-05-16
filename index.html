@@ -2,30 +2,39 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title>Le Maillon Faible - Complet</title>
+  <title>Le Maillon Faible - Joueurs à droite</title>
   <style>
     body {
       font-family: Arial, sans-serif;
       background-color: #0c1c2c;
       color: white;
-      padding: 20px;
       margin: 0;
+      padding: 20px;
+      display: flex;
+      gap: 30px;
+    }
+    .gauche {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      max-width: 250px;
+    }
+    .droite {
+      flex: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
     }
     h1 {
+      width: 100%;
       text-align: center;
-    }
-    .layout {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 30px;
-      justify-content: center;
-      margin-top: 20px;
+      margin-bottom: 20px;
     }
     .echelle, .minuteur {
       background-color: #1a2a3a;
       padding: 20px;
       border-radius: 10px;
-      min-width: 200px;
     }
     .montant {
       margin: 5px 0;
@@ -46,35 +55,36 @@
       display: block;
     }
     .joueurs {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 15px;
-      margin-top: 30px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: flex-end;
     }
     .joueur {
       background-color: #1a2a3a;
       border-radius: 10px;
       padding: 10px;
+      width: 160px;
       text-align: center;
     }
     .joueur input {
-      font-size: 1rem;
+      font-size: 0.9rem;
       text-align: center;
       width: 90%;
       margin-bottom: 5px;
     }
     .joueur button {
-      margin: 5px 3px;
-      padding: 6px 12px;
+      margin: 3px;
+      padding: 5px 10px;
       border: none;
-      border-radius: 8px;
+      border-radius: 6px;
       cursor: pointer;
     }
     .bonne { background-color: #28a745; color: white; }
     .mauvaise { background-color: #dc3545; color: white; }
     .display {
       text-align: center;
-      margin-top: 10px;
+      margin: 10px;
     }
     .minuteur button {
       margin: 5px;
@@ -111,38 +121,36 @@
   </style>
 </head>
 <body>
+  <div class="gauche">
+    <h1>💡 Le Maillon Faible</h1>
+    <div class="display">Gain en cours : <span id="currentGain">0</span> €</div>
+    <div class="display">Cagnotte totale : <span id="totalBanked">0</span> €</div>
+    <button class="bank" onclick="banquer()">💰 Banquer</button>
 
-  <h1>💡 Le Maillon Faible</h1>
-  <div class="display">Gain en cours : <span id="currentGain">0</span> €</div>
-  <div class="display">Cagnotte totale : <span id="totalBanked">0</span> €</div>
-  <button class="bank" onclick="banquer()">💰 Banquer</button>
-
-  <div class="joueurs" id="joueursContainer"></div>
-
-  <div class="layout">
     <div class="echelle" id="echelle"></div>
+
     <div class="minuteur" id="minuteurBox">
       <h3>Minuteur Manche</h3>
       <div class="timerDisplay" id="timer">2:30</div>
       <button onclick="startTimer()">▶️ Démarrer</button>
       <button onclick="pauseTimer()">⏸️ Pause</button>
-      <button onclick="resetTimer()">🔁 Réinitialiser</button>
-      <br>
+      <button onclick="resetTimer()">🔁 Réinitialiser</button><br>
       <button onclick="prevTimer()">⬅️ Manche précédente</button>
       <button onclick="nextTimer()">➡️ Manche suivante</button>
     </div>
   </div>
 
-  <button id="exportBtn" onclick="exportCSV()">📤 Exporter les scores</button>
+  <div class="droite">
+    <div class="joueurs" id="joueursContainer"></div>
+    <button id="exportBtn" onclick="exportCSV()">📤 Exporter les scores</button>
+  </div>
 
   <script>
-    // Échelle de gains
     const montants = [0, 50, 100, 200, 300, 400, 1000, 2000, 3000, 4000, 5000];
     let niveauActuel = 0;
     let gainEnCours = montants[niveauActuel];
     let cagnotteTotale = 0;
 
-    // Minuteurs
     const tempsParManche = [150, 135, 120, 105, 90, 75, 60];
     let mancheActuelle = 0;
     let tempsRestant = tempsParManche[mancheActuelle];
