@@ -4,98 +4,60 @@
   <meta charset="UTF-8" />
   <title>Maillon Faible</title>
   <style>
+    /* [Styles identiques à la version précédente, raccourcis ici pour clarté] */
     * { box-sizing: border-box; }
     html, body {
-      margin: 0;
-      padding: 0;
-      height: 100vh;
+      margin: 0; padding: 0; height: 100vh;
       font-family: Arial, sans-serif;
-      background: #0c1c2c;
-      color: white;
-      overflow: hidden;
+      background: #0c1c2c; color: white; overflow: hidden;
     }
     body {
-      display: flex;
-      gap: 10px;
-      padding: 10px;
+      display: flex; gap: 10px; padding: 10px;
     }
     .gauche, .centre, .droite {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
+      display: flex; flex-direction: column; gap: 10px;
     }
     .gauche { width: 20%; }
     .centre { width: 30%; align-items: center; }
     .droite { width: 50%; overflow-y: auto; }
-    h1 {
-      font-size: 1.2rem;
-      text-align: center;
-      margin: 0;
-    }
-    .display {
-      font-size: 0.9rem;
-      text-align: center;
-    }
+    h1 { font-size: 1.2rem; text-align: center; margin: 0; }
+    .display { font-size: 0.9rem; text-align: center; }
     .bank {
-      background: #ffc107;
-      border: none;
-      border-radius: 5px;
-      padding: 5px;
-      font-size: 0.9rem;
-      cursor: pointer;
+      background: #ffc107; border: none; border-radius: 5px;
+      padding: 5px; font-size: 0.9rem; cursor: pointer;
     }
     .echelle, .minuteur {
-      background: #1a2a3a;
-      border-radius: 8px;
-      padding: 8px;
-      font-size: 0.85rem;
+      background: #1a2a3a; border-radius: 8px;
+      padding: 8px; font-size: 0.85rem;
     }
     .montant {
-      padding: 4px;
-      margin: 2px 0;
-      border-radius: 4px;
+      padding: 4px; margin: 2px 0; border-radius: 4px;
     }
     .actuel { background: #28a745; }
     .inactif { color: gray; }
 
     .timerDisplay {
-      font-size: 1.4rem;
-      text-align: center;
-      margin: 6px 0;
+      font-size: 1.4rem; text-align: center; margin: 6px 0;
     }
 
     .joueurs {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-      gap: 8px;
-      padding-right: 10px;
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 8px; padding-right: 10px;
     }
     .joueur {
-      background: #1a2a3a;
-      padding: 5px;
-      border-radius: 6px;
-      font-size: 0.8rem;
+      background: #1a2a3a; padding: 5px;
+      border-radius: 6px; font-size: 0.8rem;
     }
     .joueur button {
-      padding: 3px 6px;
-      font-size: 0.7rem;
-      margin: 2px;
-      border-radius: 4px;
-      border: none;
-      cursor: pointer;
+      padding: 3px 6px; font-size: 0.7rem;
+      margin: 2px; border-radius: 4px;
+      border: none; cursor: pointer;
     }
     .bonne { background: #28a745; color: white; }
     .mauvaise { background: #dc3545; color: white; }
-    button { cursor: pointer; }
-
     #exportBtn {
-      background: #007bff;
-      color: white;
-      border: none;
-      padding: 6px;
-      border-radius: 6px;
-      font-size: 0.85rem;
-      margin-top: auto;
+      background: #007bff; color: white; border: none;
+      padding: 6px; border-radius: 6px; font-size: 0.85rem; margin-top: auto;
     }
   </style>
 </head>
@@ -125,6 +87,9 @@
     <div class="joueurs" id="joueursContainer"></div>
     <button id="exportBtn" onclick="exportCSV()">📤 Exporter</button>
   </div>
+
+  <!-- 🎵 Bande son pour le démarrage du chrono -->
+  <audio id="chronoSound" src="chrono.mp4"></audio>
 
   <script>
     const montants = [0, 50, 100, 200, 300, 400, 1000, 2000, 3000, 4000, 5000];
@@ -215,6 +180,12 @@
     function startTimer() {
       if (interval) clearInterval(interval);
       isPaused = false;
+
+      // ▶️ Lecture du son
+      const audio = document.getElementById("chronoSound");
+      audio.currentTime = 0;
+      audio.play();
+
       interval = setInterval(() => {
         if (!isPaused) {
           tempsRestant--;
